@@ -1,0 +1,44 @@
+<section class="signup-form">
+  <!-- FxLayoutAlign : Main Axis | Cross Axis -->
+  <form fxLayout="column" fxLayoutAlign="center center" #myForm="ngForm" (ngSubmit)="onSubmit(myForm)"
+    fxLayoutGap="10px">
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" placeholder="Your Email" ngModel required name="email" #emailInput="ngModel" />
+      <mat-error *ngIf="!emailInput.hasError('required')">E-mail is invalid.</mat-error>
+      <mat-error *ngIf="emailInput.hasError('required')">Field must not be empty.</mat-error>
+    </mat-form-field>
+    <mat-form-field hintLabel="Should be atleast 8 characters long." align="end">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" placeholder="Your Password" ngModel required minlength="8" name="passwd"
+        #pwInput="ngModel" />
+      <!-- pWinput as template Variable used for showing password length [? added for null case exeception]-->
+      <mat-hint align="end">{{ pwInput.value?.length }}/ 8</mat-hint>
+      <mat-error>Has to be atleast 8 characters long.</mat-error>
+    </mat-form-field>
+    <!--
+      DatePicker: MatNativeDate Module
+      Restrict Date : Using getFullYear & setFullYear
+    -->
+    <mat-form-field>
+      <mat-label>Date</mat-label>
+      <input matInput [matDatepicker]="date" placeholder="Your birthdate" [max]="maxDate" ngModel name="birthdate"
+        required />
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="date"></mat-datepicker-toggle>
+      <mat-datepicker #date></mat-datepicker>
+      <mat-error>Field must not be empty.</mat-error>
+    </mat-form-field>
+
+    <!-- MatFormfield takes input,textarea as child for wrapping wheras checkbox is standalone
+         Can use { labelPosition="before" } -->
+    <mat-checkbox name="agree" [(ngModel)]="agreeToTerms" required color="primary">
+      Agree to Terms and Conditions.
+    </mat-checkbox>
+
+    <button *ngIf="!(isLoading$ | async)" mat-raised-button type="submit" color="primary" [disabled]="myForm.invalid">
+      Submit
+    </button>
+    <mat-spinner *ngIf="isLoading$ | async"></mat-spinner>
+  </form>
+</section>
